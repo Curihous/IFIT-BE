@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: ${DEV_DATABASE_URL}
+    username: ${DEV_DATABASE_USERNAME}
+    password: ${DEV_DATABASE_PASSWORD}
+  
+  jpa:
+    hibernate:
+      ddl-auto: ${DEV_JPA_DDL_AUTO}
+    show-sql: ${DEV_JPA_SHOW_SQL}
+  
+  h2:
+    console:
+      enabled: false
+
+server:
+  port: ${DEV_SERVER_PORT}
+
+logging:
+  level:
+    curihous.ifit: ${DEV_LOG_LEVEL}
+    org.springframework.security: ${DEV_SECURITY_LOG_LEVEL}
+    org.hibernate.SQL: ${DEV_SQL_LOG_LEVEL}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${DEV_SQL_PARAM_LOG_LEVEL}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+  endpoint:
+    health:
+      show-details: always

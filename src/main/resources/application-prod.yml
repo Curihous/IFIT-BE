@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: ${PROD_DATABASE_URL}
+    username: ${PROD_DATABASE_USERNAME}
+    password: ${PROD_DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: ${PROD_DB_POOL_SIZE}
+      minimum-idle: ${PROD_DB_POOL_MIN_IDLE}
+      connection-timeout: ${PROD_DB_CONNECTION_TIMEOUT}
+      idle-timeout: ${PROD_DB_IDLE_TIMEOUT}
+      max-lifetime: ${PROD_DB_MAX_LIFETIME}
+  
+  jpa:
+    hibernate:
+      ddl-auto: ${PROD_JPA_DDL_AUTO}
+    show-sql: false
+    properties:
+      hibernate:
+        generate_statistics: false
+        jdbc:
+          batch_size: ${PROD_JPA_BATCH_SIZE}
+        order_inserts: true
+        order_updates: true
+
+server:
+  port: ${PROD_SERVER_PORT}
+  tomcat:
+    max-threads: ${PROD_TOMCAT_MAX_THREADS}
+    min-spare-threads: ${PROD_TOMCAT_MIN_SPARE_THREADS}
+    max-connections: ${PROD_TOMCAT_MAX_CONNECTIONS}
+
+logging:
+  level:
+    curihous.ifit: ${PROD_LOG_LEVEL}
+    org.springframework.security: ${PROD_SECURITY_LOG_LEVEL}
+    org.hibernate.SQL: ${PROD_SQL_LOG_LEVEL}
+  file:
+    name: ${PROD_LOG_FILE_PATH}
+  logback:
+    rollingpolicy:
+      max-file-size: ${PROD_LOG_MAX_FILE_SIZE}
+      max-history: ${PROD_LOG_MAX_HISTORY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
