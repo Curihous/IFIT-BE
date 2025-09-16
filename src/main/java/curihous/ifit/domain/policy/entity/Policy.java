@@ -1,10 +1,15 @@
 package curihous.ifit.domain.policy.entity;
 
 import curihous.ifit.common.entity.BaseTimeEntity;
+import curihous.ifit.domain.organization.entity.Organization;
+import curihous.ifit.domain.feature.entity.Feature;
+import curihous.ifit.domain.group.entity.Group;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "policy")
@@ -17,55 +22,66 @@ public class Policy extends BaseTimeEntity {
     @Column(name = "policy_id")
     private Long policyId;
     
-    @Column(name = "policy_name", length = 200)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", nullable = false)
+    private Organization organization;
+    
+    @Column(name = "policy_name", length = 200, nullable = false)
     private String policyName;
     
-    @Column(name = "policy_type", length = 50)
+    @Column(name = "policy_type", length = 50, nullable = false)
     @Enumerated(EnumType.STRING)
     private PolicyType policyType;
+    
+    @Column(name = "status", length = 50, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ModelSyncStatus status;
     
     @Column(name = "policy_description", columnDefinition = "TEXT")
     private String policyDescription;
     
-    @Column(name = "is_dynamic", nullable = false)
-    private Boolean isDynamic = false;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feature_id", nullable = false)
+    private Feature feature;
     
-    @Column(name = "feature_sync", columnDefinition = "TEXT")
-    private String featureSync;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
     
-    @Column(name = "group_policy_metadata_sync", columnDefinition = "TEXT")
-    private String groupPolicyMetadataSync;
+    @Column(name = "feature_synced_at")
+    private LocalDateTime featureSyncedAt;
     
-    protected Policy() {}
+    @Column(name = "group_synced_at")
+    private LocalDateTime groupSyncedAt;
     
-    public Policy(String policyName, PolicyType policyType, String policyDescription) {
+    @Column(name = "feature_name_snapshot", length = 200)
+    private String featureNameSnapshot;
+    
+    @Column(name = "group_name_snapshot", length = 200)
+    private String groupNameSnapshot;
+    
+    public Policy(Organization organization, String policyName, PolicyType policyType, 
+                  String policyDescription, Feature feature, Group group) {
+        this.organization = organization;
         this.policyName = policyName;
         this.policyType = policyType;
         this.policyDescription = policyDescription;
-        this.isDynamic = false;
+        this.feature = feature;
+        this.group = group;
+        this.status = ModelSyncStatus.PENDING;
     }
     
-    public Long getPolicyId() { return policyId; }
-    public String getPolicyName() { return policyName; }
-    public PolicyType getPolicyType() { return policyType; }
-    public String getPolicyDescription() { return policyDescription; }
-    public Boolean getIsDynamic() { return isDynamic; }
-    public String getFeatureSync() { return featureSync; }
-    public String getGroupPolicyMetadataSync() { return groupPolicyMetadataSync; }
-    
-    public void updatePolicyName(String policyName) {
-        this.policyName = policyName;
+    public void updateStatus(ModelSyncStatus status) {
+        this.status = status;
     }
     
-    public void updateDescription(String policyDescription) {
-        this.policyDescription = policyDescription;
+    public void updateFeatureSync(LocalDateTime featureSyncedAt, String featureNameSnapshot) {
+        this.featureSyncedAt = featureSyncedAt;
+        this.featureNameSnapshot = featureNameSnapshot;
     }
     
-    public void setDynamic(Boolean isDynamic) {
-        this.isDynamic = isDynamic;
-    }
-    
-    public void updateFeatureSync(String featureSync) {
-        this.featureSync = featureSync;
+    public void updateGroupSync(LocalDateTime groupSyncedAt, String groupNameSnapshot) {
+        this.groupSyncedAt = groupSyncedAt;
+        this.groupNameSnapshot = groupNameSnapshot;
     }
 }

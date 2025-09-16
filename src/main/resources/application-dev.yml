@@ -12,7 +12,6 @@ spring:
   h2:
     console:
       enabled: false
-
 server:
   port: ${DEV_SERVER_PORT}
 

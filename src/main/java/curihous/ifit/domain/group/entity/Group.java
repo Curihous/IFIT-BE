@@ -1,6 +1,7 @@
 package curihous.ifit.domain.group.entity;
 
 import curihous.ifit.common.entity.BaseTimeEntity;
+import curihous.ifit.domain.organization.entity.Organization;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,42 +18,29 @@ public class Group extends BaseTimeEntity {
     @Column(name = "group_id")
     private Long groupId;
     
-    @Column(name = "group_key", length = 100)
+    @Column(name = "group_key", length = 100, nullable = false)
     private String groupKey;
     
-    @Column(name = "group_name", length = 200)
+    @Column(name = "group_name", length = 50, nullable = false)
     private String groupName;
     
-    @Column(name = "group_description", columnDefinition = "TEXT")
+    @Column(name = "group_description", length = 100)
     private String groupDescription;
     
-    @Column(name = "org_id")
-    private Long orgId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", nullable = false)
+    private Organization organization;
     
-    protected Group() {}
-    
-    public Group(String groupKey, String groupName, String groupDescription, Long orgId) {
+    // 삭제 의도는 먼저 is_active=false로 비활성(그룹을 수정삭제했다고 Policy에서 자동 수정삭제 금지. 대신 그룹 탭에서 정책과의 동기화 액션 제공할 것임.)
+    // 정책 정리 후 필요 시 하드 삭제 
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
+    public Group(String groupKey, String groupName, String groupDescription, Organization organization) {
         this.groupKey = groupKey;
         this.groupName = groupName;
         this.groupDescription = groupDescription;
-        this.orgId = orgId;
-    }
-    
-    public Long getGroupId() { return groupId; }
-    public String getGroupKey() { return groupKey; }
-    public String getGroupName() { return groupName; }
-    public String getGroupDescription() { return groupDescription; }
-    public Long getOrgId() { return orgId; }
-    
-    public void updateGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-    
-    public void updateDescription(String groupDescription) {
-        this.groupDescription = groupDescription;
-    }
-    
-    public void assignToOrganization(Long orgId) {
-        this.orgId = orgId;
+        this.organization = organization;
+        this.isActive = true;
     }
 }

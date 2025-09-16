@@ -17,47 +17,24 @@ public class Organization extends BaseTimeEntity {
     @Column(name = "org_id")
     private Long orgId;
     
-    @Column(name = "registrar", length = 100)
-    private String registrar;
+    @Column(name = "org_name", length = 50, nullable = false)
+    private String orgName;
     
-    @Column(name = "org_contact", length = 100)
-    private String orgContact;
+    @Column(name = "rep_name", length = 50, nullable = false)
+    private String repName;
     
-    @Column(name = "setting", columnDefinition = "TEXT")
-    private String setting;
+    @Column(name = "rep_contact", length = 50, nullable = false)
+    private String repContact;
     
-    @Column(name = "org_status", length = 50)
+    @Column(name = "org_status", length = 50, nullable = false)
     @Enumerated(EnumType.STRING)
     private OrgStatus orgStatus;
     
-    protected Organization() {}
-    
-    public Organization(String registrar, String orgContact, String setting) {
-        this.registrar = registrar;
-        this.orgContact = orgContact;
-        this.setting = setting;
+    public Organization(String orgName, String repName, String repContact) {
+        this.orgName = orgName;
+        this.repName = repName;
+        this.repContact = repContact;
         this.orgStatus = OrgStatus.ACTIVE;
     }
-    
-    public Long getOrgId() { return orgId; }
-    public String getRegistrar() { return registrar; }
-    public String getOrgContact() { return orgContact; }
-    public String getSetting() { return setting; }
-    public OrgStatus getOrgStatus() { return orgStatus; }
-    
-    public void updateSetting(String setting) {
-        this.setting = setting;
-    }
-    
-    public void updateContact(String orgContact) {
-        this.orgContact = orgContact;
-    }
-    
-    public void deactivate() {
-        this.orgStatus = OrgStatus.INACTIVE;
-    }
-    
-    public void activate() {
-        this.orgStatus = OrgStatus.ACTIVE;
-    }
+
 }

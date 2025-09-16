@@ -1,6 +1,6 @@
-package curihous.ifit.domain.groupsizesnapshot.repository;
+package curihous.ifit.domain.group.repository;
 
-import curihous.ifit.domain.groupsizesnapshot.entity.GroupSizeSnapshot;
+import curihous.ifit.domain.group.entity.GroupSizeSnapshot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

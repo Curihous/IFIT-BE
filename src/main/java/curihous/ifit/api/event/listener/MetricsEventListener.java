@@ -1,5 +1,6 @@
 package curihous.ifit.api.event.listener;
 
+import curihous.ifit.api.event.MetricsUpdatedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class MetricsEventListener {
 
     @Async
     @EventListener
-    public void onMetricsUpdated() {
-
+    public void onMetricsUpdated(MetricsUpdatedEvent event) {
+        // TODO: 메트릭 업데이트 처리 로직 구현
     }
 }
